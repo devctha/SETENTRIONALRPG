@@ -2,20 +2,20 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA ORDO // CALIBRAÇÃO DE VISOR</title>
+    <title>CALIBRAÇÃO DE VISOR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- FONTES -->
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Share+Tech+Mono&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <!-- ÁUDIO (ruído) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <style>
         :root {
-            --bg: #050505;
-            --grid: #111;
-            --text: #555;
-            --accent: #d4af37;
-            --error: #ff3333;
+            --bg: #020203;
+            --grid: #0d0a0f;
+            --text: #6a5f54;
+            --accent: #d8b46a;
+            --error: #c23030;
             --mono: 'Share Tech Mono', monospace;
+            --serif: 'Cinzel', serif;
         }
 
         * {
@@ -26,60 +26,116 @@
         }
 
         body {
-            background-color: var(--bg);
+            background: radial-gradient(circle at top, #141217 0%, #050509 40%, #000 90%);
             color: var(--text);
             font-family: var(--mono);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
 
+        /* TEXTURAS E EFEITOS DE FUNDO */
         .grid-bg {
             position: fixed;
             inset: 0;
             background-image:
                 linear-gradient(var(--grid) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.3;
-            z-index: -2;
+            background-size: 50px 50px;
+            opacity: 0.2;
+            z-index: -3;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.35; }
         }
 
         .scanlines {
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: -1;
+            z-index: -2;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(0,0,0,0.3),
-                rgba(0,0,0,0.3) 1px,
+                rgba(0,0,0,0.4),
+                rgba(0,0,0,0.4) 1px,
                 transparent 1px,
-                transparent 2px
+                transparent 3px
             );
             mix-blend-mode: multiply;
+            animation: scanMove 6s linear infinite;
+        }
+        @keyframes scanMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(3px); }
         }
 
+        .noise-texture {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1; opacity: 0.07;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: noiseShift 12s linear infinite;
+        }
+        @keyframes noiseShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10%, 10%); }
+        }
+
+        /* PARTÍCULAS FLUTUANTES */
+        .particles {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 1px; height: 1px;
+            background: rgba(216,180,106,0.4);
+            border-radius: 50%;
+            animation: float linear infinite;
+            box-shadow: 0 0 3px rgba(216,180,106,0.6);
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        /* HEADER COM ANIMAÇÃO */
         header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid #222;
+            padding: 1.8rem 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: linear-gradient(to bottom, rgba(8,7,10,0.9), rgba(5,5,8,0.7));
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            animation: slideDown 1s ease-out 0.5s forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-100%); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header h1 {
             font-size: 0.95rem;
-            letter-spacing: 2px;
-            color: #777;
+            letter-spacing: 3px;
+            color: #8a7d6f;
+            text-transform: uppercase;
         }
 
         header .status {
             font-size: 0.8rem;
-            color: #444;
+            color: #555;
+            letter-spacing: 2px;
+            transition: 0.4s;
         }
 
+        /* MAIN INTERFACE */
         main {
             flex-grow: 1;
             display: flex;
@@ -87,113 +143,196 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            z-index: 5;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 1s forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TEXTO TÉCNICO (com pistas) */
+        /* TEXTO TÉCNICO COM PISTAS */
         .fine-print {
-            max-width: 650px;
-            font-size: 0.75rem;
-            color: #333;
+            max-width: 700px;
+            font-size: 0.78rem;
+            color: #4a4136;
             text-align: justify;
-            line-height: 1.8;
-            opacity: 0.7;
+            line-height: 1.9;
+            opacity: 0.6;
             transition: 0.5s;
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(15,13,18,0.4), rgba(8,7,10,0.6));
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .fine-print::before, .fine-print::after {
+            content: '';
+            position: absolute; width: 18px; height: 18px;
+            border: 1px solid rgba(216,180,106,0.3);
+            opacity: 0;
+            transition: 0.4s;
+        }
+        .fine-print::before { 
+            top: 8px; left: 8px; 
+            border-right: none; border-bottom: none; 
+        }
+        .fine-print::after { 
+            bottom: 8px; right: 8px; 
+            border-left: none; border-top: none; 
         }
         .fine-print:hover {
             opacity: 1;
-            color: #555;
+            color: #6a5f54;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .fine-print:hover::before,
+        .fine-print:hover::after {
+            opacity: 0.7;
         }
         .fine-print span {
-            transition: color 0.3s, text-shadow 0.3s;
+            transition: color 0.3s, text-shadow 0.3s, transform 0.2s;
+            display: inline-block;
         }
         .fine-print span.glow {
             color: var(--accent);
-            text-shadow: 0 0 10px var(--accent);
+            text-shadow: 0 0 15px var(--accent), 0 0 25px rgba(216,180,106,0.5);
+            animation: letterPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes letterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
-        /* SLIDER */
+        /* SLIDER CONTAINER */
         .slider-container {
-            width: 320px;
+            width: 380px;
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(15,13,18,0.8), rgba(8,7,10,0.9));
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            position: relative;
+        }
+        .slider-container::before {
+            content: '';
+            position: absolute; top: -1px; left: -1px; right: -1px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: 0.4s;
+        }
+        .slider-container:hover::before {
+            opacity: 0.7;
         }
 
         .slider-label {
             font-size: 0.85rem;
-            margin-bottom: 0.7rem;
-            color: #777;
+            margin-bottom: 1.2rem;
+            color: #8a7d6f;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         input[type=range] {
             width: 100%;
             -webkit-appearance: none;
-            background: #151515;
-            height: 3px;
+            background: linear-gradient(to right, #1a1412 0%, #0a0709 100%);
+            height: 4px;
             outline: none;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #555;
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle, var(--accent) 0%, #6a5230 100%);
             border-radius: 50%;
             cursor: pointer;
-            border: 1px solid #888;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(216,180,106,0.5);
+            transition: 0.3s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(216,180,106,0.8);
         }
 
         #freq-val {
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
+            margin-top: 1.2rem;
+            font-size: 1.6rem;
             color: var(--accent);
+            font-family: var(--serif);
+            text-shadow: 0 0 20px rgba(216,180,106,0.5);
+            letter-spacing: 3px;
         }
 
         /* BOTÃO */
         #cal-btn {
             background: transparent;
-            border: 1px solid #333;
-            color: #666;
-            padding: 0.7rem 2rem;
+            border: 1px solid rgba(216,180,106,0.3);
+            color: #8a7d6f;
+            padding: 1rem 3rem;
             cursor: pointer;
             font-family: var(--mono);
             font-size: 0.8rem;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            transition: 0.3s;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        #cal-btn::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--accent);
+            transform: translateX(-100%);
+            transition: 0.4s;
+            z-index: -1;
+        }
+        #cal-btn:hover::before {
+            transform: translateX(0);
         }
         #cal-btn:hover {
             border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+            color: #000;
+            box-shadow: 0 0 40px rgba(216,180,106,0.6);
+            transform: translateY(-2px);
         }
 
-        /* GLITCH OVERLAY */
+        /* GLITCH OVERLAY INTENSIFICADO */
         #glitch-fx {
             position: fixed;
             inset: 0;
-            background: #fff;
+            background: linear-gradient(45deg, #fff 0%, #f0f0f0 50%, #fff 100%);
             opacity: 0;
             pointer-events: none;
             z-index: 200;
+            mix-blend-mode: screen;
         }
         @keyframes glitchFlash {
-            0% { opacity: 0; transform: translate(0,0); }
-            15% { opacity: 0.9; transform: translate(-8px, 4px); }
-            30% { opacity: 0.2; transform: translate(5px, -3px); }
-            45% { opacity: 0.8; transform: translate(-3px, 2px); }
-            60% { opacity: 0.1; transform: translate(0,0); }
-            100% { opacity: 0; transform: translate(0,0); }
+            0% { opacity: 0; transform: translate(0,0) scale(1); }
+            10% { opacity: 0.95; transform: translate(-15px, 8px) scale(1.02); }
+            20% { opacity: 0.3; transform: translate(10px, -6px) scale(0.98); }
+            30% { opacity: 0.9; transform: translate(-8px, 4px) scale(1.01); }
+            40% { opacity: 0.2; transform: translate(5px, -3px) scale(0.99); }
+            50% { opacity: 0.85; transform: translate(-12px, 7px) scale(1.015); }
+            70% { opacity: 0.1; transform: translate(0,0) scale(1); }
+            100% { opacity: 0; transform: translate(0,0) scale(1); }
         }
 
         /* TERMINAL SECRETO */
         #secret-terminal {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: radial-gradient(circle at center, #0d0000 0%, #000 70%);
             color: #f33;
             font-family: var(--mono);
-            padding: 3.5rem 2rem;
+            padding: 4rem 3rem;
             display: none;
             flex-direction: column;
             overflow-y: auto;
@@ -201,46 +340,65 @@
         }
 
         .term-line {
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
             opacity: 0;
             white-space: pre-wrap;
             word-wrap: break-word;
+            text-shadow: 0 0 8px rgba(255,51,51,0.4);
         }
 
         .term-line.show {
-            animation: typeIn 0.12s forwards;
+            animation: typeIn 0.15s forwards, flicker 0.3s ease-in-out;
         }
 
         @keyframes typeIn {
-            from { opacity: 0; transform: translateY(4px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .hl {
             background: var(--error);
             color: #fff;
-            padding: 0 4px;
+            padding: 0 6px;
+            box-shadow: 0 0 15px rgba(194,48,48,0.6);
+            animation: highlightPulse 2s ease-in-out infinite;
+        }
+        @keyframes highlightPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(194,48,48,0.6); }
+            50% { box-shadow: 0 0 25px rgba(194,48,48,0.9); }
         }
 
         .nash-tag {
             color: #0ff;
+            text-shadow: 0 0 10px rgba(0,255,255,0.6);
         }
 
         .btn-exit {
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             display: inline-block;
-            color: #555;
+            color: #666;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            padding: 0.8rem 2rem;
+            border: 1px solid #333;
+            transition: 0.3s;
         }
         .btn-exit:hover {
             color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(216,180,106,0.3);
         }
 
         @media (max-width: 768px) {
-            header { padding: 1rem; }
-            main { padding: 1.5rem; }
-            #secret-terminal { padding: 2.5rem 1.5rem; }
+            header { padding: 1rem 1.5rem; }
+            main { padding: 2rem 1.5rem; }
+            #secret-terminal { padding: 3rem 1.5rem; }
+            .slider-container { width: 100%; }
+            .fine-print { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -248,15 +406,19 @@
 
     <div class="grid-bg"></div>
     <div class="scanlines"></div>
+    <div class="noise-texture"></div>
     <div id="glitch-fx"></div>
 
-    <!-- Áudio de ruído (mantido) -->
+    <!-- PARTÍCULAS FLUTUANTES -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Áudio de ruído -->
     <audio id="noise-audio" loop>
         <source src="https://lasonotheque.org/UPLOAD/mp3/0278.mp3" type="audio/mp3">
     </audio>
 
     <header>
-        <h1>SISTEMA ORDO REALITAS // CALIBRAÇÃO DE VÍDEO</h1>
+        <h1>CALIBRAÇÃO DE INTERFACE</h1>
         <div class="status" id="status-text">STATUS: AGUARDANDO AJUSTE</div>
     </header>
 
@@ -269,7 +431,7 @@
             A configuração recomendada é <span>100.0 MHz</span>. Modificações agressivas podem resultar em
             artefatos na imagem, perda de detalhes e eventual comprometimento da leitura de dados sensíveis.
             <br><br>
-            <span id="c1">O</span>bservadores não familiarizados com protocolos de campo devem evitar ajustar o visor além dos padrões da Ordo.
+            <span id="c1">O</span>bservadores não familiarizados com protocolos de campo devem evitar ajustar o visor além dos padrões do Ordo.
             <span id="c2">L</span>imites de exposição não devem ser testados sem supervisão.
             <span id="c3">H</span>á registros de agentes que, ao tentar "ver melhor", enxergaram o que não deveriam.
             <span id="c4">E</span>les não voltaram ao normal.
@@ -299,6 +461,17 @@
     <div id="secret-terminal"></div>
 
     <script>
+        // PARTÍCULAS FLUTUANTES
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 35; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 18 + 12) + 's';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
         const slider = document.getElementById('freq-slider');
         const valDisplay = document.getElementById('freq-val');
         const statusText = document.getElementById('status-text');
@@ -331,21 +504,25 @@
         slider.addEventListener('input', (e) => {
             if (solved) return;
             const val = parseFloat(e.target.value).toFixed(1);
-            valDisplay.textContent = val + ' MHz';
+            valDisplay.textContent = val;
 
             // Dica visual quando aproxima da região certa
             if (val > 107.5 && val < 109.0) {
-                document.body.style.backgroundColor = '#120000';
+                document.body.style.background = 'radial-gradient(circle at center, #1a0000 0%, #050000 70%)';
                 statusText.textContent = 'STATUS: INTERFERÊNCIA DETECTADA';
                 statusText.style.color = '#ff5555';
                 audio.volume = 0.6;
                 if (audio.paused) audio.play();
                 clueSpans.forEach(s => s.classList.add('glow'));
+                
+                // Efeito de vibração sutil no slider container
+                document.querySelector('.slider-container').style.animation = 'shake 0.3s ease-in-out infinite';
             } else {
-                document.body.style.backgroundColor = '#050505';
+                document.body.style.background = 'radial-gradient(circle at top, #141217 0%, #050509 40%, #000 90%)';
                 statusText.textContent = 'STATUS: AGUARDANDO AJUSTE';
-                statusText.style.color = '#444';
+                statusText.style.color = '#555';
                 clueSpans.forEach(s => s.classList.remove('glow'));
+                document.querySelector('.slider-container').style.animation = '';
                 if (!solved) {
                     audio.pause();
                     audio.currentTime = 0;
@@ -358,8 +535,18 @@
             }
         });
 
+        // Animação de shake
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-2px); }
+                75% { transform: translateX(2px); }
+            }
+        `;
+        document.head.appendChild(style);
+
         document.getElementById('cal-btn').addEventListener('click', () => {
-            // Botão é um bait – se o jogador não acertou 108.4, só muda o texto
             if (!solved) {
                 statusText.textContent = 'STATUS: CALIBRAÇÃO IMPRECISA';
                 statusText.style.color = '#ff5555';
@@ -373,25 +560,24 @@
             statusText.textContent = 'STATUS: PROTOCOLO NÃO AUTORIZADO';
             statusText.style.color = '#ff3333';
 
-            // Mantém o ruído, mas um pouco mais baixo
             audio.volume = 0.3;
             if (audio.paused) audio.play();
 
-            // Glitch visual
-            glitchFx.style.animation = 'glitchFlash 0.6s ease-in-out 3';
+            // Glitch visual intensificado
+            glitchFx.style.animation = 'glitchFlash 0.8s ease-in-out 4';
             setTimeout(() => {
                 glitchFx.style.animation = '';
                 glitchFx.style.opacity = 0;
                 mainInterface.style.display = 'none';
                 iniciarTerminal();
-            }, 2000);
+            }, 3200);
         }
 
         function iniciarTerminal() {
             terminal.style.display = 'flex';
 
             const linhas = [
-                "[SISTEMA DE MASCARAMENTO // ORDO REALITAS]",
+                "[SISTEMA DE MASCARAMENTO // Ordo Realitas]",
                 "[ERRO]: FREQUÊNCIA NÃO HOMOLOGADA DETECTADA.",
                 "[ERRO]: CANAL INTERCEPTADO.",
                 "-----------------------------------------------------",
@@ -401,7 +587,7 @@
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> O Farol de São Firmo nunca foi um farol.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A luz é um <span class='hl'>RASTREADOR</span>. O feixe aponta sempre para o mesmo ponto no leito rochoso.",
-                "<span class='nash-tag'>NASH/LOTUS:</span> Lá embaixo, enterrado, há algo que a Ordo chama de <span class='hl'>NÓ DE CONHECIMENTO</span>.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Lá embaixo, enterrado, há algo que o Ordo chama de <span class='hl'>NÓ DE CONHECIMENTO</span>.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> Não é um artefato. Não é um deus. É um erro antigo que aprendeu a pensar.",
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> O Projeto Setentrional nunca foi pesquisa neutra.",
@@ -416,19 +602,19 @@
                 "<span class='nash-tag'>NASH/LOTUS:</span> Agora, cada vez que alguém pisa em São Firmo com um motivo nobre, o NÓ cresce.",
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> Corvo está montando uma nova equipe.",
-                "<span class='nash-tag'>NASH/LOTUS:</span> Ele acha que está trabalhando contra a Ordo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Ele acha que está trabalhando contra o Ordo.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A verdade é que ele está repetindo o padrão que alimenta a coisa lá embaixo.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> Esperança. Sacrifício. Culpa. Ciclo perfeito.",
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A L.O.T.U.S. existe para quebrar ciclos.",
-                "<span class='nash-tag'>NASH/LOTUS:</span> Não para salvar o mundo. Isso é problema da Ordo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Não para salvar o mundo. Isso é problema do Ordo.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> Nosso trabalho é mostrar as rachaduras e ver o que você faz com isso.",
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> Agora você sabe:",
                 "<span class='nash-tag'>NASH/LOTUS:</span> O Farol aponta para baixo.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> O NÓ come histórias de heróis.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A Equipe Alpha foi refeição, não falha.",
-                "<span class='nash-tag'>NASH/LOTUS:</span> Corvo é o próximo prato que a Ordo está preparando, mesmo sem admitir.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Corvo é o próximo prato que o Ordo está preparando, mesmo sem admitir.",
                 "-----------------------------------------------------",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A pergunta não é se você acredita em mim.",
                 "<span class='nash-tag'>NASH/LOTUS:</span> A pergunta é:",
@@ -459,12 +645,12 @@
                     });
                     terminal.scrollTop = terminal.scrollHeight;
                 }, delay);
-                delay += Math.max(800, linha.length * 22);
+                delay += Math.max(900, linha.length * 24);
             });
 
             setTimeout(() => {
                 const link = document.createElement('a');
-                link.href = "index.html";
+                link.href = "setentrional.html";
                 link.textContent = "> APAGAR O QUE DER E VOLTAR À SUPERFÍCIE";
                 link.className = "btn-exit term-line";
                 terminal.appendChild(link);
