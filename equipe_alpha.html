@@ -28,7 +28,7 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)),
                               url('https://www.transparenttextures.com/patterns/diagmonds-light.png');
         }
 
@@ -38,8 +38,9 @@
             padding: 2rem;
             background: #050505;
             display: flex; justify-content: space-between; align-items: flex-end;
+            position: relative;
         }
-        
+
         .header-title h1 {
             font-family: 'Oswald', sans-serif;
             text-transform: uppercase;
@@ -170,7 +171,7 @@
             font-size: 0.7em; padding: 0 4px;
             user-select: none;
         }
-        .redacted:hover { background: #333; color: #555; cursor: help; } /* Easter egg: hover revela pouco */
+        .redacted:hover { background: #333; color: #555; cursor: help; }
 
         /* FOOTER */
         .footer-note {
@@ -185,19 +186,216 @@
             background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
         }
 
-        /* BOTÃO VOLTAR */
+        /* BOTÃO FECHAR */
         .back-btn {
             position: fixed; top: 2rem; right: 2rem; z-index: 100;
             color: #666; text-decoration: none; font-family: var(--mono); font-size: 0.8rem;
         }
         .back-btn:hover { color: #fff; }
 
+        /* NOVO: BOTÃO "ACESSAR AVISO" */
+        .alert-btn {
+            position: fixed; top: 2rem; left: 2rem; z-index: 110;
+            display: inline-flex; gap: 10px; align-items: center;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ddd;
+            background: rgba(10,10,10,0.75);
+            border: 1px solid rgba(138,0,0,0.6);
+            padding: 0.6rem 0.9rem;
+            text-decoration: none;
+            transition: 0.25s;
+            backdrop-filter: blur(6px);
+        }
+        .alert-btn:hover{
+            color:#fff;
+            border-color: rgba(138,0,0,1);
+            box-shadow: 0 0 18px rgba(138,0,0,0.25);
+        }
+
+        /* NOVO: POPUP DE ERRO */
+        .modal {
+            position: fixed; inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.82);
+            backdrop-filter: blur(6px);
+        }
+        .modal.show { display: flex; }
+
+        .modal-card {
+            width: min(760px, 94vw);
+            background: linear-gradient(180deg, #050505 0%, #090909 100%);
+            border: 1px solid rgba(138,0,0,0.65);
+            box-shadow: 0 0 40px rgba(138,0,0,0.20);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-card::before{
+            content:"";
+            position:absolute; inset:-2px;
+            background: linear-gradient(90deg, transparent, rgba(138,0,0,0.25), transparent);
+            transform: translateX(-70%);
+            animation: sweep 2.8s infinite;
+            opacity: .75;
+            pointer-events:none;
+        }
+        @keyframes sweep{
+            0%{ transform: translateX(-80%); }
+            55%{ transform: translateX(120%); }
+            100%{ transform: translateX(120%); }
+        }
+
+        .modal-head {
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid rgba(138,0,0,0.35);
+            display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+            background: rgba(0,0,0,0.55);
+        }
+        .modal-head h3{
+            font-family: var(--mono);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            color: var(--accent-red);
+        }
+        .modal-close{
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #bbb;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.35rem 0.7rem;
+            cursor:pointer;
+            transition: .2s;
+        }
+        .modal-close:hover{
+            border-color: rgba(255,255,255,0.35);
+            color:#fff;
+        }
+
+        .modal-body{
+            padding: 1.2rem;
+            color: #bdbdbd;
+        }
+        .errline{
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: .6rem;
+        }
+        .errline b{ color: #ffae00; font-weight: 600; }
+        .errbox{
+            margin-top: 1rem;
+            border: 1px dashed rgba(138,0,0,0.55);
+            background: rgba(0,0,0,0.55);
+            padding: 1rem;
+        }
+        .linkline{
+            display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color:#ddd;
+        }
+        .goto{
+            display:inline-flex; align-items:center; gap:10px;
+            border: 1px solid rgba(138,0,0,0.65);
+            background: rgba(138,0,0,0.10);
+            color:#fff;
+            padding: 0.55rem 0.9rem;
+            cursor:pointer;
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: .2s;
+        }
+        .goto:hover{
+            background: rgba(138,0,0,0.22);
+            box-shadow: 0 0 16px rgba(138,0,0,0.25);
+        }
+
+        .glitch-note{
+            margin-top: 1rem;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .shake{
+            animation: shake 0.35s linear 1;
+        }
+        @keyframes shake{
+            0%,100%{ transform: translate(0,0) }
+            20%{ transform: translate(-6px, 2px) }
+            40%{ transform: translate(5px, -2px) }
+            60%{ transform: translate(-4px, -1px) }
+            80%{ transform: translate(4px, 2px) }
+        }
+
+        @media (max-width: 560px){
+            header{ padding: 1.4rem; flex-direction: column; align-items:flex-start; gap:14px; }
+            .header-meta{ text-align:left; }
+            .alert-btn{ left: 1rem; top: 1rem; }
+            .back-btn{ right: 1rem; top: 1rem; }
+        }
     </style>
 </head>
-<body>
 
+<body>
     <div class="scanlines"></div>
+
+    <!-- NOVO: botão que abre o pop-up -->
+    <a href="#" class="alert-btn" id="openAvisoBtn">
+        <i class="fas fa-triangle-exclamation"></i> ACESSAR AVISO
+    </a>
+
     <a href="index.html" class="back-btn"><i class="fas fa-times"></i> FECHAR ARQUIVO</a>
+
+    <!-- NOVO: modal de erro com link -->
+    <div class="modal" id="errorModal" aria-hidden="true">
+        <div class="modal-card" id="modalCard" role="dialog" aria-modal="true" aria-label="Erro de acesso">
+            <div class="modal-head">
+                <div>
+                    <h3><i class="fas fa-bug"></i> ERRO DE ROTEAMENTO // REFERÊNCIA EXTERNA</h3>
+                    <div style="font-family: var(--mono); font-size: 0.75rem; color: #666; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;">
+                        Código: ORDO-LINK-REFUSED // Estado: instável
+                    </div>
+                </div>
+                <button class="modal-close" id="closeModalBtn">fechar</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="errline">> Falha ao resolver destino por índice primário: <b>ARQUIVOS_CENTRAIS</b>.</div>
+                <div class="errline">> Fallback acionado: <b>ENCAMINHAMENTO MANUAL</b>.</div>
+                <div class="errline">> Atenção: o destino pode estar sob monitoramento e auditoria.</div>
+
+                <div class="errbox">
+                    <div class="linkline">
+                        <div>
+                            DESTINO SUGERIDO:
+                            <span style="color:#ffae00;">Novos Agentes</span>
+                        </div>
+                        <button class="goto" id="gotoBtn">
+                            <i class="fas fa-link"></i> abrir
+                        </button>
+                    </div>
+
+                    <div class="glitch-note">
+                        Nota: logs relacionados a este encaminhamento foram parcialmente corroídos.<br>
+                        Se o pop-up reaparecer, não é falha do usuário. É contenção.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <header>
         <div class="header-title">
@@ -243,7 +441,7 @@
                 <div class="card-body">
                     <div class="stat-row"><span>NEX:</span> <span class="stat-val">45%</span></div>
                     <div class="stat-row"><span>PATENTE:</span> <span class="stat-val">OFICIAL DE CAMPO</span></div>
-                    
+
                     <div class="profile-text">
                         <strong>Perfil Psicológico:</strong> Ex-militar com histórico de insubordinação justificada por "proteção de equipe". Avaliações indicavam um apego patológico aos membros do esquadrão, priorizando a segurança deles acima dos objetivos da Ordo.
                         <br><br>
@@ -265,7 +463,7 @@
                 <div class="card-body">
                     <div class="stat-row"><span>NEX:</span> <span class="stat-val">50%</span></div>
                     <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">CONDUITE</span></div>
-                    
+
                     <div class="profile-text">
                         <strong>Perfil Psicológico:</strong> Alta afinidade com a Membrana. Histórico de instabilidade emocional compensada por um poder bruto excepcional. Relatórios médicos apontavam curiosidade perigosa pelo "Outro Lado".
                         <br><br>
@@ -287,7 +485,7 @@
                 <div class="card-body">
                     <div class="stat-row"><span>NEX:</span> <span class="stat-val">30%</span></div>
                     <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">SINAIS</span></div>
-                    
+
                     <div class="profile-text">
                         <strong>Perfil Psicológico:</strong> Perfil analítico obsessivo. Tendência a racionalizar o paranormal, o que causou atraso de reação em encontros anteriores. Extremamente leal ao Agente Marcus, servindo sob seu comando há 6 anos.
                         <br><br>
@@ -309,7 +507,7 @@
                 <div class="card-body">
                     <div class="stat-row"><span>NEX:</span> <span class="stat-val">35%</span></div>
                     <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">TRAUMA</span></div>
-                    
+
                     <div class="profile-text">
                         <strong>Perfil Psicológico:</strong> Cirurgiã de trauma. Conhecida pela frieza em situações de gore extremo. No entanto, demonstrou hesitação fatal ao tratar a infecção da Agente Yin, recusando protocolos de contenção por "vínculo afetivo".
                         <br><br>
@@ -331,9 +529,9 @@
                 <div class="card-body">
                     <div class="stat-row"><span>NEX:</span> <span class="stat-val">40%</span></div>
                     <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">INFILTRAÇÃO</span></div>
-                    
+
                     <div class="profile-text">
-                        <strong>Perfil Psicológico:</strong> Solitário. Histórico de missões solo. Sua inclusão na Equipe Alpha foi um pedido direto do Agente Marcus, visando integrar suas habilidades de furtividade. 
+                        <strong>Perfil Psicológico:</strong> Solitário. Histórico de missões solo. Sua inclusão na Equipe Alpha foi um pedido direto do Agente Marcus, visando integrar suas habilidades de furtividade.
                         <br><br>
                         <strong>Último Registro:</strong> Desaparecido nas primeiras 6 horas de missão. Seu rádio transmitiu sons biológicos não identificados por 4 minutos antes de ser destruído.
                     </div>
@@ -352,5 +550,36 @@
 
     </div>
 
+    <script>
+      const openBtn = document.getElementById("openAvisoBtn");
+      const modal = document.getElementById("errorModal");
+      const card = document.getElementById("modalCard");
+      const closeBtn = document.getElementById("closeModalBtn");
+      const gotoBtn = document.getElementById("gotoBtn");
+
+      function openModal(){
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden","false");
+        // micro “erro” visual
+        card.classList.remove("shake");
+        void card.offsetWidth;
+        card.classList.add("shake");
+      }
+
+      function closeModal(){
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden","true");
+      }
+
+      openBtn.addEventListener("click", (e)=>{ e.preventDefault(); openModal(); });
+      closeBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+      window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
+
+      gotoBtn.addEventListener("click", ()=>{
+        // redireciona para o aviso
+        window.location.href = "aviso_ordem.html";
+      });
+    </script>
 </body>
 </html>
