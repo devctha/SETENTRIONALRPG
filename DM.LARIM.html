@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ARQUIVO ÔMEGA - PROJETO QUIMERA [KAIRA]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Teko:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --panel-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-red: #da3633;
+            --accent-red-faded: rgba(218, 54, 51, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Roboto Mono', monospace;
+            color: var(--text-main);
+            margin: 0;
+            padding: 2vw;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-bg);
+        }
+
+        .dossier-header {
+            padding: 30px 40px;
+            border-bottom: 2px solid var(--accent-red);
+            background: linear-gradient(180deg, rgba(218, 54, 51, 0.05) 0%, rgba(22, 27, 34, 0) 100%);
+            text-align: center;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Teko', sans-serif;
+            font-size: 2.5em;
+            color: var(--accent-red);
+            border: 4px double var(--accent-red);
+            padding: 5px 15px;
+            transform: rotate(10deg);
+            opacity: 0.5;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 3.5em;
+            margin: 0;
+            letter-spacing: 5px;
+            color: var(--text-main);
+        }
+
+        .dossier-subheader {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        .document {
+            padding: 30px 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .document-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.2em;
+            letter-spacing: 2px;
+            margin: 0;
+            color: var(--accent-red);
+        }
+
+        .metadata {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        h3 {
+            font-size: 1.1em;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p, li {
+            font-size: 0.9em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .redacted {
+            background-color: #000;
+            color: #000;
+            user-select: none;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-red);
+            background-color: var(--accent-red-faded);
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-main);
+        }
+        
+        blockquote.final-words {
+            text-align: center;
+            border: 2px solid var(--accent-red);
+            font-size: 1.5em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85em;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #21262d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <header class="dossier-header">
+        <div class="stamp">CLASSIFICADO</div>
+        <h1>PROJETO QUIMERA</h1>
+        <p class="dossier-subheader">REGISTRO DE TESTES – ESPÉCIME KC-001 "KAIRA"</p>
+    </header>
+
+    <!-- TEST LOG 001 - CAPTURA E AVALIAÇÃO INICIAL -->
+    <article class="document">
+        <div class="document-header">
+            <h2>REGISTRO DE TESTE 001: AVALIAÇÃO INICIAL</h2>
+            <p class="metadata">DATA: <span class="redacted">██/██/2024</span> | NÍVEL DE ACESSO: ESCARLATE-4</p>
+        </div>
+        <h3>DESCRIÇÃO DO ESPÉCIME</h3>
+        <p>O Espécime KC-001, provisoriamente denominado "KAIRA", foi recuperado em cooperação com a Congregação após o Incidente de <span class="redacted">█████████</span>. Apresenta uma morfologia humanoide bípede com aproximadamente 2.8 metros de altura. A epiderme foi substituída por placas quitinosas de cor obsidiana, interligadas por veias bioluminescentes que pulsam em um tom fraco de ciano. Não possui traços faciais discerníveis, exceto por uma única fenda vertical no centro da face, que não parece servir para vocalização ou visão.</p>
+        
+        <h3>PROCEDIMENTO</h3>
+        <p>O espécime foi transferido para a Sala de Contenção Criogênica 7. Observação passiva foi conduzida por 72 horas para avaliar comportamento. Nenhuma hostilidade foi demonstrada. O espécime permaneceu majoritariamente imóvel, com a "face" voltada para o canto mais escuro da cela.</p>
+        
+        <h3>RESULTADOS</h3>
+        <p>A passividade do espécime é atípica para uma entidade de sua classe de energia. Leituras membrânicas indicam uma flutuação controlada, sugerindo senciência e contenção voluntária. A bioluminescência diminui na presença de observadores, indicando uma possível reação ao medo ou estresse.</p>
+        
+        <h3>NOTAS DO PESQUISADOR (DRA. LILITH CASANOVA)</h3>
+        <blockquote>Essa... criatura... não se comporta como as outras. Há uma resignação em sua postura. Um silêncio que não é vazio, mas pesado. Recomendação: proceder com cautela extrema. A passividade pode ser uma armadilha.</blockquote>
+    </article>
+
+    <!-- TEST LOG 004 - VIVISSECÇÃO PRELIMINAR -->
+    <article class="document">
+        <div class="document-header">
+            <h2>REGISTRO DE TESTE 004: AMOSTRAGEM DE TECIDO</h2>
+            <p class="metadata">DATA: <span class="redacted">██/██/2024</span> | NÍVEL DE ACESSO: ESCARLATE-5</p>
+        </div>
+        <h3>PROCEDIMENTO</h3>
+        <p>O espécime foi sedado via gás neural VX-9 e contido em uma mesa operatória de titânio. Uma serra cirúrgica de ponta de diamante foi utilizada para remover uma seção de 3cm x 3cm da placa quitinosa da coxa esquerda. A resistência do material foi comparável à do carbeto de tungstênio, exigindo três lâminas.</p>
+        
+        <h3>RESULTADOS</h3>
+        <p>Durante o procedimento, o sedativo demonstrou-se ineficaz. O espécime emitiu uma vocalização subsônica que causou enxaqueca aguda e epistaxe em 3 dos 4 pesquisadores presentes. O fluido interno (doravante "hemolinfa") é de cor índigo escuro e coagula instantaneamente em contato com o ar, formando uma substância cristalina. A ferida começou a se regenerar visivelmente em menos de 60 segundos.</p>
+        
+        <h3>NOTAS DO PESQUISADOR (DRA. LILITH CASANOVA)</h3>
+        <blockquote>A capacidade regenerativa é assombrosa. A vocalização não foi um ataque, mas um grito de dor. A entidade sente. Isso torna os próximos passos... problematicamente mais interessantes. A Congregação está pressionando por resultados mais tangíveis.</blockquote>
+    </article>
+
+    <!-- TEST LOG 017 - DESCOBERTA DA PROPRIEDADE CURATIVA -->
+    <article class="document">
+        <div class="document-header">
+            <h2>REGISTRO DE TESTE 017: ANÁLISE HEMATOLÓGICA E INCIDENTE IMPREVISTO</h2>
+            <p class="metadata">DATA: <span class="redacted">██/██/2024</span> | NÍVEL DE ACESSO: ÔMEGA / APENAS OLHOS DO CONSELHO</p>
+        </div>
+        <h3>PROCEDIMENTO</h3>
+        <p>Extração forçada de 500ml de hemolinfa via cateter arterial de grande calibre inserido diretamente na aorta femoral. O espécime se debateu violentamente, quebrando duas das quatro amarras de contenção antes de ser subjugado com pulsos elétricos de 200kV.</p>
+        
+        <h3>INCIDENTE</h3>
+        <p>Durante o transporte da amostra, o Técnico Rojas (designado ao laboratório, diagnosticado com Sarcoma de Ewing terminal, estágio IV) tropeçou, quebrando o frasco de contenção. A hemolinfa respingou sobre uma ferida aberta em seu antebraço. A segurança imediatamente o colocou em quarentena para eutanásia preventiva.</p>
+        
+        <h3>RESULTADO INESPERADO</h3>
+        <p>Após 12 horas de observação, exames revelaram que todas as células cancerígenas no corpo do Técnico Rojas foram erradicadas. Seu corpo passou por uma regeneração celular completa, revertendo todos os danos da quimioterapia e da doença. Ele está, para todos os efeitos, perfeitamente saudável. A hemolinfa de KAIRA... cura. Cura tudo.</p>
+        
+        <h3>DIRETIVA DE EMERGÊNCIA DO CONSELHO ESCARLATE</h3>
+        <blockquote>O Projeto Quimera é reclassificado para Prioridade Ômega. Todas as outras organizações (Fundações, Cultos, Ordens) devem ser mantidas no escuro a qualquer custo. A produção do "Soro Quimera" deve começar imediatamente. A extração de hemolinfa deve ser maximizada, independentemente do estresse causado ao espécime. KAIRA não é mais uma anomalia a ser estudada. É um recurso a ser colhido.</blockquote>
+    </article>
+
+    <!-- TEST LOG 048 - EXTRAÇÃO SISTEMÁTICA -->
+    <article class="document">
+        <div class="document-header">
+            <h2>REGISTRO DE TESTE 048: OTIMIZAÇÃO DE EXTRAÇÃO</h2>
+            <p class="metadata">DATA: <span class="redacted">██/██/2025</span> | NÍVEL DE ACESSO: ÔMEGA</p>
+        </div>
+        <h3>PROCEDIMENTO</h3>
+        <p>Instalação de um sistema de drenagem contínua com 4 cateteres permanentemente afixados às artérias principais. Para combater a diminuição da produção de hemolinfa devido ao estresse e degradação física, foi implementado o "Protocolo de Estímulo Regenerativo": amputação cíclica dos membros, seguida pela aplicação de compostos químicos para forçar a regeneração acelerada. O ciclo é de 12 horas.</p>
+
+        <h3>VOCALIZAÇÕES DO ESPÉCIME</h3>
+        <p>O espécime desenvolveu a capacidade de falar em português rudimentar, provavelmente por osmose psíquica com a equipe. As vocalizações são registradas continuamente.</p>
+        <blockquote>
+            [14:32] "Por... favor... parem..."<br>
+            [18:01] "Dói... tudo dói..."<br>
+            [22:45] (Durante o ciclo de amputação) Um grito contínuo de 17 minutos que quebrou o vidro de observação à prova de som.<br>
+            [03:12] "Eu... só... quero... morrer."
+        </blockquote>
+
+        <h3>ANÁLISE DE DADOS DE PRODUÇÃO</h3>
+        <table class="data-table">
+            <thead><tr><th>Ciclo</th><th>Volume de Hemolinfa (L)</th><th>Potência do Soro (%)</th><th>Notas</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>3.2</td><td>98.7%</td><td>Produção inicial alta.</td></tr>
+                <tr><td>15</td><td>1.8</td><td>99.1%</td><td>Diminuição do volume, aumento da potência.</td></tr>
+                <tr><td>47</td><td>0.9</td><td>85.2%</td><td>Degradação severa do espécime. Potência em queda.</td></tr>
+                <tr><td>48</td><td>0.7</td><td>81.4%</td><td>Recomendado intensificar o Protocolo de Estímulo.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>NOTAS DO PESQUISADOR (DRA. LILITH CASANOVA)</h3>
+        <blockquote>As organizações externas estão farejando. A cura milagrosa de um de nossos financiadores de alto nível vazou. A demanda pelo Soro Quimera é astronômica. A Congregação argumenta que a alma da criatura está se "desfazendo" e que isso contamina o soro. Eu argumento que almas não aparecem em cromatógrafos. Precisamos de mais volume. A moralidade é um luxo que o fim da doença humana não nos permite ter.</blockquote>
+    </article>
+
+    <!-- TEST LOG 097 - TESTE DE LIMITE EXISTENCIAL -->
+    <article class="document">
+        <div class="document-header">
+            <h2>REGISTRO DE TESTE 097: TESTE DE LIMITE EXISTENCIAL</h2>
+            <p class="metadata">DATA: <span class="redacted">██/██/2025</span> | NÍVEL DE ACESSO: ÔMEGA / APENAS HARTMANN</p>
+        </div>
+        <h3>PROCEDIMENTO</h3>
+        <p>O espécime está em estado catatônico. A regeneração quase cessou. A produção de hemolinfa é insignificante. Em uma tentativa final de forçar uma reação, foi decidido expor o espécime a um fragmento de Realidade do <span class="redacted">Elemento de Morte</span>, na teoria de que o choque paradoxal poderia reiniciar seu sistema biológico.</p>
+
+        <h3>RESULTADOS</h3>
+        <p>Ao ser exposto, o espécime não reagiu como esperado. A bioluminescência cessou completamente. As placas quitinosas tornaram-se cinzentas e quebradiças. Pela primeira vez, a fenda em sua face se abriu, revelando não um vazio, mas um único olho azul, semelhante a uma estrela moribunda, que focou em mim. O silêncio na sala era absoluto. Então, com uma clareza que não era sua, que parecia vir de todos os lugares e de lugar nenhum, ele falou.</p>
+        
+        <h3>REGISTRO DE VOCALIZAÇÃO FINAL</h3>
+        <blockquote>
+            (A voz é calma, ressonante e desprovida de dor. Cada palavra ecoa com um poder ancestral.)<br>
+            "Não há mais nada para vocês tirarem. A casca está vazia. O eco se foi."<br>
+            (O olho se fecha lentamente. Um último suspiro, como o ranger de pedras antigas.)
+        </blockquote>
+        <blockquote class="final-words">
+            "Eu rogo a ti, todo poderoso Muka'an."
+        </blockquote>
+        <p>Após estas palavras, todos os sinais vitais do Espécime KC-001 cessaram simultaneamente. O corpo se desintegrou em uma poeira cinza e inerte. Um pulso de energia não identificada foi detectado, mas desapareceu antes que pudesse ser rastreado.</p>
+
+        <h3>ADENDO FINAL - ANÁLISE PÓS-CESSAÇÃO</h3>
+        <p>O Soro Quimera não existe mais. KAIRA se foi.</p>
+        <p>Mas nos deixou com algo infinitamente mais valioso e aterrorizante do que a cura para nossas doenças. Uma oração. Um nome: <b>Muka'an</b>.</p>
+        <p>As criaturas do Outro Lado não são apenas monstros. Não são apenas forças caóticas da natureza. Elas têm fé. Elas têm cultura. Elas têm... um... Deus.</p>
+        <p>Nossa cosmologia inteira está errada. A guerra que travamos não é contra bestas, mas contra uma civilização cujo poder supremo ainda não conhecemos. O Projeto Quimera falhou em seu objetivo de produzir um soro, mas obteve sucesso em revelar uma verdade que pode nos condenar a todos. A questão fundamental mudou. Não é mais 'o que eles são?'. É 'no que eles acreditam?'. E, mais importante... <b>o que acontece quando seu Deus decidir atender a uma prece?</b></p>
+    </article>
+</div>
+
+</body>
+</html>
